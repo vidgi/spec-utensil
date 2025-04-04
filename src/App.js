@@ -11,6 +11,7 @@ import { EffectComposer, Glitch, Pixelation } from '@react-three/postprocessing'
 import { GlitchMode } from 'postprocessing';
 import dirtModel from "./dirt_blend.glb";
 import texture from "./texture.hdr";
+import placeholder from "./images/placeholder.png";
 import "./App.css";
 
 const easeInOutCubic = (t) => {
@@ -25,7 +26,6 @@ export default function App() {
   const [currentView, setCurrentView] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const containerRef = useRef(null);
-  // const prevRotation = useRef([0, 0, 0]);
 
   const handleScroll = (e) => {
     const container = containerRef.current;
@@ -49,27 +49,19 @@ export default function App() {
 
   const views = [
     {
-      title: "speculative utensil",
+      title: "spoutstraw",
       description: "a speculative utensil designed by vidya giri",
-      camera: { position: [0, 0, 5], fov: 50 },
-      background: ["#000000", "#000000"],
-      wireframe: false,
-      rotation: [0, 0, 0],
-      zoom: 0.5,
-      material: {
-        type: 'basic',
-        color: '#ffffff'
-      },
-      effects: true
+      showSketches: true,
+      zoom: 1
     },
     {
-      title: "Welcome",
-      description: "Explore the intricate details of this 3D model through different perspectives. Scroll to navigate through various views.",
-      camera: { position: [0, 0, 5], fov: 50 },
-      background: ["#000000", "#1a1a1a"],
+      title: "wisdom from nature",
+      description: "with this groundbreaking straw inspired by lotus seed pods, the last bit of a sadhya meal (a traditional malayali meal served on a banana leaf) can be slurped up",
+      camera: { position: [0, 0, 3], fov: 50 },
+      background: ["#ffffff", "#ffffff"],
       wireframe: false,
       rotation: [0, 0, 0],
-      zoom: 2,
+      zoom: 1,
       material: {
         type: 'physical',
         color: '#ffffff',
@@ -80,26 +72,26 @@ export default function App() {
       }
     },
     {
-      title: "Wireframe View",
-      description: "Explore the structural complexity of the model through its wireframe representation.",
+      title: "suction chamber spout",
+      description: "various suction chambers of the straw's spout allow for a variety of flavors to be sucked up in one go",
       camera: { position: [0, 0, 5], fov: 50 },
-      background: ["#1a1a1a", "#000000"],
+      background: ["#ffffff", "#ffffff"],
       wireframe: true,
       rotation: [0, 0, 0],
-      zoom: 3,
+      zoom: 2,
       material: {
         type: 'basic',
-        color: '#ffffff'
+        color: 'khaki'
       }
     },
     {
-      title: "Far View",
-      description: "Appreciate the model's overall form and presence in the space. Click and drag to rotate, scroll to zoom.",
+      title: "slurp without your hands",
+      description: "a new way to enjoy a sadhya and savor every last bit, with zero hands required",
       camera: { position: [0, 0, 5], fov: 50 },
-      background: ["#000000", "#1a1a1a"],
+      background: ["#ffffff", "#ffffff"],
       wireframe: false,
       rotation: [0, Math.PI / 2, 0],
-      zoom: 2,
+      zoom: 1.5,
       material: {
         type: 'physical',
         color: '#ffffff',
@@ -113,6 +105,7 @@ export default function App() {
   ];
 
   const currentRotation = useMemo(() => {
+    if (currentView === 0) return [0, 0, 0];
     const currentViewRotation = views[currentView].rotation;
     const nextViewRotation = views[Math.min(currentView + 1, views.length - 1)].rotation;
     
@@ -126,6 +119,7 @@ export default function App() {
   }, [currentView, scrollProgress]);
 
   const currentZoom = useMemo(() => {
+    if (currentView === 0) return 1;
     const currentViewZoom = views[currentView].zoom;
     const nextViewZoom = views[Math.min(currentView + 1, views.length - 1)].zoom;
     
@@ -141,7 +135,7 @@ export default function App() {
           key={index} 
           className="view-section"
           style={{ 
-            background: `linear-gradient(to bottom, ${view.background[0]}, ${view.background[1]})`,
+            background: `linear-gradient(to bottom, ${view.background?.[0] || '#ffffff'}, ${view.background?.[1] || '#ffffff'})`,
             height: '100vh',
             position: 'relative'
           }}
@@ -150,37 +144,53 @@ export default function App() {
             <h1>{view.title}</h1>
             <p>{view.description}</p>
           </div>
-          <Canvas shadows camera={view.camera}>
-            <Suspense fallback={null}>
-              <Environment files={texture} />
-              {view.orbitControls && <OrbitControls autoRotate enableZoom={false} enablePan={false} />}
-              <DirtModel 
-                position={[0, 0, 0]} 
-                scale={currentZoom} 
-                wireframe={view.wireframe}
-                material={view.material}
-                rotation={currentRotation}
-              />
-              {view.effects && (
-                <EffectComposer>
-                  <Pixelation granularity={1} />
-                  <Glitch
-                    delay={[0.5, 2]}
-                    duration={[0.6, 1.0]}
-                    strength={[0.3, 1]}
-                    mode={GlitchMode.SPORADIC}
-                    columns={0.05}
-                    dtSize={100}
-                    active
-                    ratio={0.85}
-                  />
-                </EffectComposer>
-              )}
-            </Suspense>
-          </Canvas>
+          {view.showSketches ? (
+            <div className="sketch-cluster">
+                <div className="sketch-item">
+                  <img src={placeholder} alt="Sketch" />
+                </div>
+            </div>
+          ) : (
+            <Canvas shadows camera={view.camera}>
+              <Suspense fallback={null}>
+                <Environment files={texture} />
+                {view.orbitControls && <OrbitControls autoRotate enableZoom={false} enablePan={false} />}
+                <DirtModel 
+                  position={[0, 0, 0]} 
+                  scale={currentZoom} 
+                  wireframe={view.wireframe}
+                  material={view.material}
+                  rotation={currentRotation}
+                />
+                {view.effects && (
+                  <EffectComposer>
+                    <Pixelation granularity={1} />
+                    <Glitch
+                      delay={[0.5, 2]}
+                      duration={[0.6, 1.0]}
+                      strength={[0.3, 1]}
+                      mode={GlitchMode.SPORADIC}
+                      columns={0.05}
+                      dtSize={100}
+                      active
+                      ratio={0.85}
+                    />
+                  </EffectComposer>
+                )}
+              </Suspense>
+            </Canvas>
+          )}
         </section>
+        
       ))}
       <Loader />
+      <footer className="footer">
+        <p><small>
+        made by  <a href="https://vidyagiri.com" target="_blank" rel="noopener noreferrer">vidya giri</a> 
+          <br/>
+          font: basteleur by keussel (velvetyne.fr) + space grotesk (google fonts)</small>
+        </p>
+      </footer>
     </div>
   );
 }
