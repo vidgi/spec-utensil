@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/spec-utensil/static/css/main.5b89df49.css",
+    "main.js": "/spec-utensil/static/js/main.8d7b2664.js",
+    "static/media/dirt_blend.glb": "/spec-utensil/static/media/dirt_blend.9ec9e53e94ee1267435f.glb",
+    "static/media/texture.hdr": "/spec-utensil/static/media/texture.fb956068f6e4c97cec56.hdr",
+    "static/media/handjet.ttf": "/spec-utensil/static/media/handjet.48984a8b123eda64c076.ttf",
+    "index.html": "/spec-utensil/index.html",
+    "main.5b89df49.css.map": "/spec-utensil/static/css/main.5b89df49.css.map",
+    "main.8d7b2664.js.map": "/spec-utensil/static/js/main.8d7b2664.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5b89df49.css",
+    "static/js/main.8d7b2664.js"
+  ]
+}
